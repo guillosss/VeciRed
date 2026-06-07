@@ -1,15 +1,20 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
 
-// Leer .env manualmente (evita interferencia de dotenvx)
-const envPath = path.join(__dirname, 'src', '.env');
-const envContent = fs.readFileSync(envPath, 'utf8');
-envContent.split('\n').forEach(line => {
-  const [key, ...vals] = line.split('=');
-  if (key && key.trim()) process.env[key.trim()] = vals.join('=').trim();
-});
+// En Render las variables ya están en process.env automáticamente
+// Solo usar dotenv en desarrollo local
+if (process.env.NODE_ENV !== 'production') {
+  const fs = require('fs');
+  const path = require('path');
+  const envPath = path.join(__dirname, '.env');
+  if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf8');
+    envContent.split('\n').forEach(line => {
+      const [key, ...vals] = line.split('=');
+      if (key && key.trim()) process.env[key.trim()] = vals.join('=').trim();
+    });
+  }
+}
 
 const authRoutes = require('./src/routes/auth.routes');
 const perfilRoutes = require('./src/routes/perfil.routes');
