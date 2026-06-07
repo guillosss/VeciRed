@@ -1,0 +1,8 @@
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=vecired
+DB_USER=postgres
+DB_PASSWORD=postgres
+
+JWT_SECRET=vecired_secret_key_2026
+PORT=3000

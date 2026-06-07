@@ -17,4 +17,20 @@ const crear = async (nombre, correo, hash, rol) => {
   return result.rows[0];
 };
 
-module.exports = { findByCorreo, crear };
+const toggleSuspendido = async (id_usuario) => {
+  const result = await pool.query(
+    `UPDATE usuario SET suspendido = NOT suspendido
+     WHERE id_usuario=$1 RETURNING *`,
+    [id_usuario]
+  );
+  return result.rows[0];
+};
+
+const getAll = async () => {
+  const result = await pool.query(
+    'SELECT id_usuario, nombre, correo, rol, suspendido FROM usuario ORDER BY fecha_registro DESC'
+  );
+  return result.rows;
+};
+
+module.exports = { findByCorreo, crear, toggleSuspendido, getAll };
